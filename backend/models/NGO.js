@@ -49,5 +49,5 @@ const ngoSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
-
+ngoSchema.index({ location: "2dsphere" });
 module.exports = mongoose.model("NGO", ngoSchema);
