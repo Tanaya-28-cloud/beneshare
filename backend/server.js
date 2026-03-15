@@ -11,6 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/api/ngo", ngoRoutes);
 app.use("/api/donor", donorRoutes);
 app.use("/api/donation", donationRoutes);

@@ -1,11 +1,12 @@
 const DonationRequest = require("../models/DonationRequest");
+const cloudinary = require("../config/cloudinary");
 
 
 // CREATE DONATION REQUEST (Donor)
 const createDonationRequest = async (req, res) => {
     try {
-
-        const { donorId, ngoId, itemType, description, image } = req.body;
+        console.log(req.body);
+        const { donorId, ngoId, itemType, description } = req.body;
 
         if (!donorId || !ngoId || !itemType || !description) {
             return res.status(400).json({
@@ -13,12 +14,34 @@ const createDonationRequest = async (req, res) => {
             });
         }
 
+        let imageUrl = "";
+
+        // upload image if provided
+        if (req.file) {
+
+            const result = await new Promise((resolve, reject) => {
+
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: "donations" },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+
+                stream.end(req.file.buffer);
+
+            });
+
+            imageUrl = result.secure_url;
+        }
+
         const request = new DonationRequest({
             donor: donorId,
             ngo: ngoId,
             itemType,
             description,
-            image
+            image: imageUrl
         });
 
         await request.save();
