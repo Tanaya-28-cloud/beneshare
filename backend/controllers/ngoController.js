@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
 const registerNGO = async (req, res) => {
     try {
 
